@@ -14,9 +14,19 @@ $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $stmt->bind_result($xp, $level);
 $stmt->fetch();
+$stmt->close();
 ?>
 
-<h1>Welkom bij TaskHero, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
-<p>Je hebt <?php echo $xp; ?> XP en bent level <?php echo $level; ?>.</p>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welkom bij TaskHero, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+    <p>Je hebt <?php echo (int)$xp; ?> XP en bent level <?php echo (int)$level; ?>.</p>
 
-<a href="tasks.php">Ga naar je taken</a> | <a href="php/logout.php">Uitloggen</a>
+    <a href="php/tasks.php">Ga naar je taken</a> | <a href="php/logout.php">Uitloggen</a>
+</body>
+</html>
