@@ -33,7 +33,7 @@ $result = $conn->query("SELECT * FROM tasks WHERE user_id = $user_id");
       <s><?php echo htmlspecialchars($row['title']); ?></s>
     <?php else: ?>
       <?php echo htmlspecialchars($row['title']); ?>
-      <a href="complete_task.php?id=<?php echo $row['id']; ?>">Voltooid</a>
+      <a href="completetask.php?id=<?php echo $row['id']; ?>">Voltooid</a>
     <?php endif; ?>
   </li>
 <?php endwhile; ?>
