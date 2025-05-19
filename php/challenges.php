@@ -35,4 +35,7 @@ $result = $stmt->get_result();
 <h3>Nieuwe uitdaging aanmaken</h3>
 <form action="php/addchallenge.php" method="POST">
   <input type="text" name="challenge_text" placeholder="Uitdaging beschrijving" required>
-  <button type="submit
+  <button type="submit">Toevoegen</button>
+</form>
+
+<a href="dashboard.php">Terug</a>
