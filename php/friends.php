@@ -9,7 +9,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-
 $stmt = $conn->prepare("
     SELECT u.id, u.username 
     FROM friends f
@@ -25,33 +24,30 @@ $stmt->close();
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8" />
-    <title>Vriendenlijst</title>
-    <link rel="stylesheet" href="css/style.css" />
-
+  <meta charset="UTF-8" />
+  <title>Vriendenlijst</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body class="bg-light">
-<div class="container mt-5">
+  <div class="container mt-5">
     <div class="card shadow p-4 rounded-4 border-0">
-        <h2 class="custom-profile-title fw-bold mb-3">Jouw vrienden</h2>
-        <?php if ($friends->num_rows > 0): ?>
-            <ul class="list-group mb-3">
-                <?php while ($friend = $friends->fetch_assoc()): ?>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <?= htmlspecialchars($friend['username']) ?>
-                        <a href="php/remove_friend.php?friend_id=<?= $friend['id'] ?>" 
-                           class="btn btn-sm btn-outline-danger" 
-                           onclick="return confirm('Weet je zeker dat je deze vriend wilt verwijderen?');">
-                           Verwijderen
-                        </a>
-                    </li>
-                <?php endwhile; ?>
-            </ul>
-        <?php else: ?>
-            <p>Je hebt nog geen vrienden toegevoegd.</p>
-        <?php endif; ?>
-        <a href="dashboard.php" class="btn btn-outline-primary mt-4">Terug naar dashboard</a>
+      <h2 class="custom-profile-title fw-bold mb-3">Jouw vrienden</h2>
+
+      <?php if ($friends->num_rows > 0): ?>
+        <ul class="list-group mb-3">
+          <?php while ($friend = $friends->fetch_assoc()): ?>
+            <li class="list-group-item">
+              <?= htmlspecialchars($friend['username']) ?>
+            </li>
+          <?php endwhile; ?>
+        </ul>
+      <?php else: ?>
+        <p>Je hebt nog geen vrienden toegevoegd.</p>
+      <?php endif; ?>
+
+      <a href="dashboard.php" class="btn btn-outline-primary mt-4">Terug naar dashboard</a>
     </div>
-</div>
+  </div>
 </body>
 </html>
