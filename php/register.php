@@ -1,14 +1,35 @@
 <?php
-require 'php/db.php';
+require 'db.php';
 
 $username = $_POST['username'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+$password = $_POST['password'];
 
-$stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-$stmt->bind_param("ss", $username, $password);
-if ($stmt->execute()) {
-    header("Location: login.html");
+
+$sql_check = "SELECT id FROM users WHERE username = ?";
+$stmt = $conn->prepare($sql_check);
+$stmt->bind_param("s", $username);
+$stmt->execute();
+$stmt->store_result();
+
+if ($stmt->num_rows > 0) {
+ 
+    echo "Deze gebruikersnaam is al in gebruik.";
 } else {
-    echo "Fout: gebruikersnaam bestaat al.";
+
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+
+    $sql_insert = "INSERT INTO users (username, password, xp, level) VALUES (?, ?, 0, 1)";
+    $stmt_insert = $conn->prepare($sql_insert);
+    $stmt_insert->bind_param("ss", $username, $hashed_password);
+
+    if ($stmt_insert->execute()) {
+        echo "Registratie succesvol!";
+    } else {
+        echo "Er is iets fout gegaan, probeer het opnieuw.";
+    }
 }
+
+$stmt->close();
+$conn->close();
 ?>
