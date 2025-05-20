@@ -8,35 +8,43 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$friendship_id = $_GET['id'] ?? null;
+$request_id = $_GET['id'] ?? null;
 
-if ($friendship_id) {
-
-    $stmt = $conn->prepare("UPDATE friends SET status = 'accepted' WHERE id = ? AND friend_id = ?");
-    $stmt->bind_param("ii", $friendship_id, $user_id);
+if ($request_id) {
+    
+    $stmt = $conn->prepare("SELECT user_id, friend_id FROM friends WHERE id = ? AND friend_id = ? AND status = 'pending'");
+    $stmt->bind_param("ii", $request_id, $user_id);
     $stmt->execute();
+    $stmt->store_result();
 
+    if ($stmt->num_rows === 1) {
+        
+        $stmt_update = $conn->prepare("UPDATE friends SET status = 'accepted' WHERE id = ?");
+        $stmt_update->bind_param("i", $request_id);
+        $stmt_update->execute();
 
-    $stmt2 = $conn->prepare("SELECT user_id FROM friends WHERE id = ?");
-    $stmt2->bind_param("i", $friendship_id);
-    $stmt2->execute();
-    $stmt2->bind_result($other_user_id);
-    $stmt2->fetch();
+        
+        $stmt->bind_result($friend_user_id, $friend_friend_id);
+        $stmt->fetch();
 
+        $stmt_check = $conn->prepare("SELECT id FROM friends WHERE user_id = ? AND friend_id = ?");
+        $stmt_check->bind_param("ii", $user_id, $friend_user_id);
+        $stmt_check->execute();
+        $stmt_check->store_result();
 
-    $stmt_check = $conn->prepare("SELECT id FROM friends WHERE user_id = ? AND friend_id = ?");
-    $stmt_check->bind_param("ii", $user_id, $other_user_id);
-    $stmt_check->execute();
-    $stmt_check->store_result();
+        if ($stmt_check->num_rows === 0) {
+            $stmt_insert = $conn->prepare("INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, 'accepted')");
+            $stmt_insert->bind_param("ii", $user_id, $friend_user_id);
+            $stmt_insert->execute();
+        }
 
-    if ($stmt_check->num_rows === 0) {
-        $stmt_insert = $conn->prepare("INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, 'accepted')");
-        $stmt_insert->bind_param("ii", $user_id, $other_user_id);
-        $stmt_insert->execute();
+        header("Location: ../friendrequests.php?success=accepted");
+        exit;
+    } else {
+        header("Location: ../friendrequests.php?error=notfound");
+        exit;
     }
-
-    header("Location: ../friends.php");
 } else {
-    echo "Geen vriend opgegeven.";
+    header("Location: ../friendrequests.php?error=invalid");
+    exit;
 }
-?>

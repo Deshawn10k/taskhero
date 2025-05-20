@@ -28,7 +28,7 @@ if ($stmt->num_rows === 1) {
 
     if ($stmt_check->num_rows === 0) {
   
-        $stmt_insert = $conn->prepare("INSERT INTO friends (user_id, friend_id) VALUES (?, ?)");
+        $stmt_insert = $conn->prepare("INSERT INTO friends (user_id, friend_id, status) VALUES (?, ?, 'pending')");
         $stmt_insert->bind_param("ii", $user_id, $friend_id);
         $stmt_insert->execute();
         echo "Vriendschapsverzoek verstuurd.";

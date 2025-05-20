@@ -8,14 +8,17 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$friendship_id = $_GET['id'] ?? null;
+$request_id = $_GET['id'] ?? null;
 
-if ($friendship_id) {
-    $stmt = $conn->prepare("DELETE FROM friends WHERE id = ? AND friend_id = ?");
-    $stmt->bind_param("ii", $friendship_id, $user_id);
+if ($request_id) {
+   
+    $stmt = $conn->prepare("DELETE FROM friends WHERE id = ? AND friend_id = ? AND status = 'pending'");
+    $stmt->bind_param("ii", $request_id, $user_id);
     $stmt->execute();
-    header("Location: ../friends.php");
+
+    header("Location: ../friendrequests.php?success=declined");
+    exit;
 } else {
-    echo "Geen vriend opgegeven.";
+    header("Location: ../friendrequests.php?error=invalid");
+    exit;
 }
-?>

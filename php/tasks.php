@@ -3,11 +3,12 @@ session_start();
 require 'db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.html");
-    exit;
+  header("Location: login.html");
+  exit;
 }
 
 $user_id = $_SESSION['user_id'];
+
 
 $stmt = $conn->prepare("SELECT id, title, status FROM tasks WHERE user_id = ?");
 $stmt->bind_param("i", $user_id);
@@ -17,6 +18,7 @@ $result = $stmt->get_result();
 
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -26,6 +28,7 @@ $result = $stmt->get_result();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
     <a class="navbar-brand fw-bold" href="dashboard.php">TaskHero</a>
@@ -34,12 +37,21 @@ $result = $stmt->get_result();
     </div>
   </nav>
 
+
   <div class="container mt-5">
+     <?php if (isset($_GET['success']) && $_GET['success'] == 'task_done'): ?>
+    <div class="alert alert-success">Taak succesvol afgerond! XP is verhoogd.</div>
+  <?php endif; ?>
+
+  <?php if (isset($_GET['error'])): ?>
+    <div class="alert alert-danger">Er ging iets mis bij het verwerken van de taak.</div>
+  <?php endif; ?>
+
     <h1 class="text-primary mb-4">Jouw Taken</h1>
 
-    <form action= "addtask.php" method="POST" class="d-flex mb-4">
+    <form action="addtask.php" method="POST" class="d-flex mb-4">
       <input type="text" name="title" class="form-control me-2" placeholder="Nieuwe taak..." required>
-      <button type="submit" class="btn btn-custom">Toevoegen</button>
+      <button type="submit" class="btn btn-warning">Toevoegen</button>
     </form>
 
     <?php while ($row = $result->fetch_assoc()): ?>
@@ -51,11 +63,12 @@ $result = $stmt->get_result();
           </span>
         </div>
         <div>
-          <a href="php/markdone.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-success me-1">✓</a>
-          <a href="php/deletetask.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger">🗑️</a>
+          <a href="markdone.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-success me-1">✓</a>
+          <a href="deletetask.php?id=<?php echo $row['id']; ?>" class="btn btn-sm btn-danger">🗑️</a>
         </div>
       </div>
     <?php endwhile; ?>
   </div>
 </body>
+
 </html>
