@@ -13,7 +13,7 @@ $stmt = $conn->prepare("
     SELECT u.id, u.username 
     FROM friends f
     JOIN users u ON (f.friend_id = u.id)
-    WHERE f.user_id = ?
+    WHERE f.user_id = ? AND f.status = 'accepted'
 ");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
