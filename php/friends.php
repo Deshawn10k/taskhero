@@ -32,7 +32,7 @@ $stmt->close();
 <body class="bg-light">
   <div class="container mt-5">
     <div class="card shadow p-4 rounded-4 border-0">
-      <h2 class="custom-profile-title fw-bold mb-3">Jouw vrienden</h2>
+      <h2 class="custom-profile-title fw-bold mb-3">Vriendenlijst</h2>
 
       <?php if ($friends->num_rows > 0): ?>
         <ul class="list-group mb-3">
