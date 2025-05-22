@@ -47,12 +47,14 @@ $result = $stmt->get_result();
     <div class="alert alert-danger">Er ging iets mis bij het verwerken van de taak.</div>
   <?php endif; ?>
 
-    <h1 class="text-primary mb-4">Jouw Taken</h1>
+    <h1 class="text-primary mb-4">Takenoverzicht</h1>
 
     <form action="addtask.php" method="POST" class="d-flex mb-4">
       <input type="text" name="title" class="form-control me-2" placeholder="Nieuwe taak..." required>
       <button type="submit" class="btn btn-warning">Toevoegen</button>
     </form>
+
+    <a href="dashboard.php" class="btn btn-secondary mb-3">Terug naar Dashboard</a>
 
     <?php while ($row = $result->fetch_assoc()): ?>
       <div class="card mb-2 p-3 shadow-sm d-flex flex-row justify-content-between align-items-center rounded-4">
