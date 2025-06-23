@@ -34,7 +34,7 @@ $stmt->close();
     <div class="ms-auto">
       <a href="tasks.php" class="btn btn-light me-2">Taken</a>
       <a href="profile.php" class="btn btn-light me-2">Profiel</a>
-      <a href="php/logout.php" class="btn btn-danger">Uitloggen</a>
+      <a href="logout.php" class="btn btn-danger">Uitloggen</a>
     </div>
   </nav>
 
